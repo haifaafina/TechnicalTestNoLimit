@@ -43,7 +43,7 @@ nolimit-ds-test-Haifa/
 
 ---
 
-## 🧬 Alur Logika Sistem (System Flowchart)
+## 🧬 Deskripsi Alur Logika Sistem (System Flowchart)
 
 Fase 1: Inisialisasi & Pengolahan Data Awal (Initialization & Data Ingestion)
 Alur data dimulai dari proses penyiapan sistem hingga data siap digunakan pada antarmuka pengguna:
