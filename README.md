@@ -45,40 +45,46 @@ nolimit-ds-test-Haifa/
 
 ## 🧬 Alur Logika Sistem (System Flowchart)
 
+Fase 1: Inisialisasi & Pengolahan Data Awal (Initialization & Data Ingestion)
+Alur data dimulai dari proses penyiapan sistem hingga data siap digunakan pada antarmuka pengguna:
 
-```mermaid
-graph TD
-    Start([🏁 INITIALIZATION: Streamlit Engine Dijalankan via Terminal]) --> LoadModel[🔮 MODEL LOADING: Memuat Arsitektur DistilBERT & IndoBERT ke Memori]
-    DataIngest[📂 DATA INGESTION: Membaca Berkas Lokal dataset.csv]
-    DataExplo[📊 DATA EXPLORATION: Merender Sampel Dataset Input pada Dasbor Utama]
+Inisialisasi Sistem (Start): Sistem dinyalakan dengan mengeksekusi mesin Streamlit menggunakan perintah terminal oleh pengguna.
 
-    LoadModel --> DataIngest
-    DataIngest --> DataExplo
+Memuat Model (LoadModel): Setelah mesin aktif, sistem secara otomatis memuat dua arsitektur kecerdasan buatan ke dalam memori lokal, yaitu model DistilBERT (untuk sentimen) dan IndoBERT (untuk representasi makna teks).
 
-    DataExplo --> PathA{BRANCH A: ANALISIS SENTIMEN}
-    DataExplo --> PathB{BRANCH B: SEMANTIC SEARCH}
+Membaca Dataset (DataIngest): Alur berlanjut ke proses pembacaan file data lokal yang bernama dataset.csv yang berisi teks masukan serta label aslinya.
 
-    PathA --> UserA[🖱️ Pengguna Memilih Data Teks & Mengeksekusi Prediksi]
-    UserA --> ProcA[🤖 Pipeline Transformer Memproses Ekstraksi Label & Probabilitas]
-    ProcA --> CheckNetral{EVALUASI KONDISI LOGIKA: Apakah Label Asli == 0?}
-    
-    CheckNetral -->|Ya| OverrideNetral[🟡 Override ke neutral, Score = 1.0 - Score]
-    CheckNetral -->|Tidak| RetainAsli[🟢/🔴 Retain Hasil Asli dari Model]
-    
-    OverrideNetral --> RenderA[📈 RENDERING: Tampilkan Tabel Hasil Klasifikasi & Skor]
-    RetainAsli --> RenderA
+Eksplorasi Data (DataExplo): Data yang telah berhasil dibaca kemudian dikirim ke dasbor utama Streamlit untuk dirender (ditampilkan) dalam bentuk tabel sampel teks agar pengguna bisa mengeksplorasi isi dataset awal.
 
-    PathB --> UserB[✍️ Pengguna Menginput Kueri Pencarian Bebas]
-    UserB --> ProcB[🔏 IndoBERT Mengonversi Kueri Menjadi Vektor Embeddings]
-    ProcB --> MathB[🧮 KOMPUTASI MATEMATIKA: Menghitung Sudut Kedekatan Makna via Cosine Similarity]
-    MathB --> RankB[🔢 Mengurutkan Indeks & Mengekstrak Top-3 Hasil Paling Relevan]
-    RankB --> RenderB[ℹ️ RENDERING: Tampilkan Hasil Konseptual & Tingkat Kemiripan %]
+Dari tahap eksplorasi data ini, sistem memecah fungsionalitas aplikasinya menjadi dua jalur independen (Branch A dan Branch B).
 
-    RenderA --> End([🔚 END])
-    RenderB --> End
+Fase 2: Branch A — Proses Analisis Sentimen (Sentiment Analysis)
+Jalur ini menangani bagaimana teks diklasifikasikan ke dalam emosi tertentu:
 
-    style Start fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#FFF
-    style End fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#FFF
-    style PathA fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
-    style PathB fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
-    style CheckNetral fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#FFF
+Aksi Pengguna (UserA): Pengguna berinteraksi dengan dasbor, memilih data teks yang ingin diuji, lalu menekan tombol untuk mengeksekusi prediksi sentimen.
+
+Pemrosesan Model (ProcA): Teks yang dipilih dikirim masuk ke dalam Pipeline Transformer berbasis model DistilBERT untuk diekstrak prediksi label sentimennya beserta nilai probabilitas tingkat keyakinannya (confidence score).
+
+Evaluasi Kondisi Logika (CheckNetral): Sistem melakukan pengecekan logika (kondisi percabangan): "Apakah Label Asli dari dataset bernilai sama dengan 0?"
+
+Jika YA (OverrideNetral): Label prediksi akan dipaksa (override) menjadi sentimen neutral. Nilai skor keyakinannya disesuaikan ulang menggunakan rumus matematika: Score = 1.0 - Score.
+
+Jika TIDAK (RetainAsli): Sistem tidak melakukan modifikasi apa pun dan mempertahankan hasil label asli bawaan dari prediksi model (positive atau negative).
+
+Rendering Akhir (RenderA): Kedua ujung kondisi percabangan tersebut bermuara pada komponen grafik antarmuka Streamlit untuk menampilkan tabel hasil klasifikasi akhir beserta visualisasi skor probabilitasnya secara real-time.
+
+Fase 3: Branch B — Proses Pencarian Semantik (Semantic Search)
+Jalur ini menangani pencarian berbasis kedekatan makna konseptual, bukan sekadar kesamaan kata kunci:
+
+Aksi Pengguna (UserB): Pengguna mengetikkan sebuah kueri atau kalimat pencarian bebas pada kolom input pencarian yang tersedia di dasbor.
+
+Konversi Vektor Embeddings (ProcB): Kueri teks bebas tersebut diproses menggunakan model IndoBERT untuk diubah dari teks mentah menjadi representasi vektor numerik padat (dense vector representation).
+
+Komputasi Matematika (MathB): Vektor kueri pengguna kemudian dihitung sudut kedekatan spasialnya terhadap seluruh matriks embedding dataset yang ada di sistem menggunakan perhitungan Cosine Similarity.
+
+Pengurutan & Ekstraksi (RankB): Sistem mengurutkan indeks data berdasarkan nilai skor kemiripan tertinggi, lalu mengekstrak 3 buah hasil teks teratas (Top-3) yang memiliki makna paling relevan dengan kueri.
+
+Rendering Akhir (RenderB): Hasil Top-3 teks konseptual tersebut dirender ke layar dasbor, lengkap dengan menampilkan persentase (%) tingkat kemiripannya.
+
+Fase 4: Terminasi Sistem (End)
+Setelah hasil dari Branch A (RenderA) maupun Branch B (RenderB) selesai ditampilkan seluruhnya ke hadapan pengguna pada dasbor interaktif, seluruh siklus eksekusi logika sistem mencapai titik akhir (End). Sistem kembali ke posisi siaga (idle) menunggu input atau interaksi baru berikutnya dari pengguna.
