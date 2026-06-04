@@ -42,43 +42,38 @@ nolimit-ds-test-Haifa/
 
 ## 🧬 Alur Logika Sistem (System Flowchart)
 
+
 ```mermaid
 graph TD
-    %% Konfigurasi Desain Tema
-    %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#F8FAFC', 'edgeLabelBackground':'#FFFFFF', 'clusterBkg':'#F1F5F9'}}}%%
+    Start([🏁 INITIALIZATION: Streamlit Engine Dijalankan via Terminal]) --> LoadModel[🔮 MODEL LOADING: Memuat Arsitektur DistilBERT & IndoBERT ke Memori]
+    DataIngest[📂 DATA INGESTION: Membaca Berkas Lokal dataset.csv]
+    DataExplo[📊 DATA EXPLORATION: Merender Sampel Dataset Input pada Dasbor Utama]
 
-    %% Fase Inisialisasi & Data Ingestion
-    Start([🏁 INITIALIZATION:<br>Streamlit Engine Dijalankan via Terminal]) --> LoadModel[🔮 MODEL LOADING:<br>Memuat Arsitektur DistilBERT & IndoBERT ke Memori]
-    LoadModel --> DataIngest[📂 DATA INGESTION:<br>Membaca Berkas Lokal 'dataset.csv']
-    DataIngest --> DataExplo[📊 DATA EXPLORATION:<br>Merender Sampel Dataset Input pada Dasbor Utama]
+    LoadModel --> DataIngest
+    DataIngest --> DataExplo
 
-    %% Percabangan Fitur
-    DataExplo --> PathA{BRANCH A:<br>ANALISIS SENTIMEN}
-    DataExplo --> PathB{BRANCH B:<br>SEMANTIC SEARCH}
+    DataExplo --> PathA{BRANCH A: ANALISIS SENTIMEN}
+    DataExplo --> PathB{BRANCH B: SEMANTIC SEARCH}
 
-    %% Alur Branch A: Analisis Sentimen
-    PathA --> UserA[🖱️ Pengguna Memilih Data Teks<br>& Mengeksekusi Prediksi]
-    UserA --> ProcA[🤖 Pipeline Transformer Memproses<br>Ekstraksi Label & Probabilitas]
-    ProcA --> CheckNetral{EVALUASI KONDISI LOGIKA:<br>Apakah Label Asli == 0?}
+    PathA --> UserA[🖱️ Pengguna Memilih Data Teks & Mengeksekusi Prediksi]
+    UserA --> ProcA[🤖 Pipeline Transformer Memproses Ekstraksi Label & Probabilitas]
+    ProcA --> CheckNetral{EVALUASI KONDISI LOGIKA: Apakah Label Asli == 0?}
     
-    CheckNetral -->|Ya| OverrideNetral[🟡 Override ke 'neutral'<br>Score = 1.0 - Score]
+    CheckNetral -->|Ya| OverrideNetral[🟡 Override ke neutral, Score = 1.0 - Score]
     CheckNetral -->|Tidak| RetainAsli[🟢/🔴 Retain Hasil Asli dari Model]
     
-    OverrideNetral --> RenderA[📈 RENDERING:<br>Tampilkan Tabel Hasil Klasifikasi & Skor]
+    OverrideNetral --> RenderA[📈 RENDERING: Tampilkan Tabel Hasil Klasifikasi & Skor]
     RetainAsli --> RenderA
 
-    %% Alur Branch B: Semantic Search
-    PathB --> UserB[✍️ Pengguna Menginput Kueri<br>Pencarian Bebas]
-    UserB --> ProcB[🔏 IndoBERT Mengonversi Kueri<br>Menjadi Koordinat Vektor Embeddings]
-    ProcB --> MathB[🧮 KOMPUTASI MATEMATIKA:<br>Menghitung Sudut Kedekatan Makna via Cosine Similarity]
-    MathB --> RankB[🔢 Mengurutkan Indeks & Mengekstrak<br>Top-3 Hasil Paling Relevan]
-    RankB --> RenderB[ℹ️ RENDERING:<br>Tampilkan Hasil Konseptual & Tingkat Kemiripan %]
+    PathB --> UserB[✍️ Pengguna Menginput Kueri Pencarian Bebas]
+    UserB --> ProcB[🔏 IndoBERT Mengonversi Kueri Menjadi Vektor Embeddings]
+    ProcB --> MathB[🧮 KOMPUTASI MATEMATIKA: Menghitung Sudut Kedekatan Makna via Cosine Similarity]
+    MathB --> RankB[🔢 Mengurutkan Indeks & Mengekstrak Top-3 Hasil Paling Relevan]
+    RankB --> RenderB[ℹ️ RENDERING: Tampilkan Hasil Konseptual & Tingkat Kemiripan %]
 
-    %% Titik Akhir Aplikasi
     RenderA --> End([🔚 END])
     RenderB --> End
 
-    %% Kustomisasi Warna Elemen Utama
     style Start fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#FFF
     style End fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#FFF
     style PathA fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
