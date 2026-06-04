@@ -42,12 +42,10 @@ nolimit-ds-test-Haifa/
 
 ## 🧬 Alur Logika Sistem (System Flowchart)
 
-
-```mermaid
 graph TD
-    Start([🏁 INITIALIZATION: Streamlit Engine Dijalankan via Terminal]) --> LoadModel[🔮 MODEL LOADING: Memuat Arsitektur DistilBERT & IndoBERT ke Memori]
-    DataIngest[📂 DATA INGESTION: Membaca Berkas Lokal dataset.csv]
-    DataExplo[📊 DATA EXPLORATION: Merender Sampel Dataset Input pada Dasbor Utama]
+    Start([INITIALIZATION: Streamlit Engine Dijalankan]) --> LoadModel[MODEL LOADING: Memuat Arsitektur DistilBERT dan IndoBERT]
+    DataIngest[DATA INGESTION: Membaca Berkas dataset.csv]
+    DataExplo[DATA EXPLORATION: Merender Sampel Dataset pada Dasbor]
 
     LoadModel --> DataIngest
     DataIngest --> DataExplo
@@ -55,27 +53,29 @@ graph TD
     DataExplo --> PathA{BRANCH A: ANALISIS SENTIMEN}
     DataExplo --> PathB{BRANCH B: SEMANTIC SEARCH}
 
-    PathA --> UserA[🖱️ Pengguna Memilih Data Teks & Mengeksekusi Prediksi]
-    UserA --> ProcA[🤖 Pipeline Transformer Memproses Ekstraksi Label & Probabilitas]
-    ProcA --> CheckNetral{EVALUASI KONDISI LOGIKA: Apakah Label Asli == 0?}
+    PathA --> UserA[Pengguna Memilih Data Teks dan Mengeksekusi Prediksi]
+    UserA --> ProcA[Pipeline Transformer Memproses Ekstraksi Label]
+    ProcA --> CheckNetral{EVALUASI LOGIKA: Apakah Label Asli sama dengan 0}
     
-    CheckNetral -->|Ya| OverrideNetral[🟡 Override ke neutral, Score = 1.0 - Score]
-    CheckNetral -->|Tidak| RetainAsli[🟢/🔴 Retain Hasil Asli dari Model]
+    CheckNetral -->|Ya| OverrideNetral[Override ke neutral dan Hitung Ulang Score]
+    CheckNetral -->|Tidak| RetainAsli[Retain Hasil Asli dari Model]
     
-    OverrideNetral --> RenderA[📈 RENDERING: Tampilkan Tabel Hasil Klasifikasi & Skor]
+    OverrideNetral --> RenderA[RENDERING: Tampilkan Tabel Hasil Klasifikasi]
     RetainAsli --> RenderA
 
-    PathB --> UserB[✍️ Pengguna Menginput Kueri Pencarian Bebas]
-    UserB --> ProcB[🔏 IndoBERT Mengonversi Kueri Menjadi Vektor Embeddings]
-    ProcB --> MathB[🧮 KOMPUTASI MATEMATIKA: Menghitung Sudut Kedekatan Makna via Cosine Similarity]
-    MathB --> RankB[🔢 Mengurutkan Indeks & Mengekstrak Top-3 Hasil Paling Relevan]
-    RankB --> RenderB[ℹ️ RENDERING: Tampilkan Hasil Konseptual & Tingkat Kemiripan %]
+    PathB --> UserB[Pengguna Menginput Kueri Pencarian Bebas]
+    UserB --> ProcB[IndoBERT Mengonversi Kueri Menjadi Vektor Embeddings]
+    ProcB --> MathB[KOMPUTASI MATEMATIKA: Menghitung Jarak Cosine Similarity]
+    MathB --> RankB[Mengekstrak Top 3 Hasil Paling Relevan]
+    RankB --> RenderB[RENDERING: Tampilkan Hasil Konseptual dan Kemiripan]
 
-    RenderA --> End([🔚 END])
+    RenderA --> End([END])
     RenderB --> End
 
     style Start fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#FFF
     style End fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#FFF
     style PathA fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
+    style PathB fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
+    style CheckNetral fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#FFFs
     style PathB fill:#0284C7,stroke:#0369A1,stroke-width:2px,color:#FFF
     style CheckNetral fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#FFF
